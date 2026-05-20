@@ -13,27 +13,27 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "backend/server.js"
+      "dest": "/backend/server.js"
     },
     {
       "src": "/css/(.*)",
-      "dest": "frontend/css/$1"
+      "dest": "/frontend/css/$1"
     },
     {
       "src": "/js/(.*)",
-      "dest": "frontend/js/$1"
+      "dest": "/frontend/js/$1"
     },
     {
       "src": "/test/(.*)",
-      "dest": "frontend/test/$1"
+      "dest": "/frontend/test/$1"
     },
     {
       "src": "/index.html",
-      "dest": "frontend/index.html"
+      "dest": "/frontend/index.html"
     },
     {
       "src": "/(.*)",
-      "dest": "frontend/index.html"
+      "dest": "/frontend/index.html"
     }
   ]
 }
