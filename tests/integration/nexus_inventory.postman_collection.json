@@ -1,0 +1,197 @@
+{
+	"info": {
+		"_postman_id": "8d38cbcd-1234-4e56-9abc-df7212ef5432",
+		"name": "Nexus Inventory API Integration Tests",
+		"description": "Integration test suite for the Amazon-style Nexus Inventory backend API. Tests retrieval, update, reset, and PDF generation operations.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Obtener Estado del Inventario (GET)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 OK\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response content-type is JSON\", function () {",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"pm.test(\"Response body contains products and warehouses arrays\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property(\"products\");",
+							"    pm.expect(jsonData).to.have.property(\"warehouses\");",
+							"    pm.expect(jsonData.products).to.be.an(\"array\");",
+							"    pm.expect(jsonData.warehouses).to.be.an(\"array\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/state",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"state"
+					]
+				},
+				"description": "Retrieves the complete state of the inventory, including products, warehouses, customers, orders, and suppliers."
+			},
+			"response": []
+		},
+		{
+			"name": "2. Actualizar Estado del Inventario (POST)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 OK\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response confirms success\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property(\"success\", true);",
+							"    pm.expect(jsonData).to.have.property(\"message\", \"State saved successfully\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"isLoggedIn\": true,\n  \"products\": [\n    {\n      \"id\": \"TEST-SKU-999\",\n      \"name\": \"Dispositivo de Prueba de Integración\",\n      \"category\": \"Electrónica\",\n      \"price\": 199.99,\n      \"stock\": 10,\n      \"warehouse\": \"Amazon-MX1\",\n      \"rating\": 5.0\n    }\n  ],\n  \"warehouses\": [\n    {\n      \"id\": \"Amazon-MX1\",\n      \"location\": \"Estado de México\",\n      \"capacity\": \"10%\",\n      \"status\": \"Active\"\n    }\n  ],\n  \"customers\": [],\n  \"orders\": [],\n  \"suppliers\": [],\n  \"billing\": []\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/state",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"state"
+					]
+				},
+				"description": "Updates the database state with a test configuration containing one product and one warehouse."
+			},
+			"response": []
+		},
+		{
+			"name": "3. Generar Reporte PDF (GET)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 OK\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Content-Type is application/pdf\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\", \"application/pdf\");",
+							"});",
+							"",
+							"pm.test(\"Content-Disposition is attachment\", function () {",
+							"    pm.response.to.have.header(\"Content-Disposition\");",
+							"    pm.expect(pm.response.headers.get(\"Content-Disposition\")).to.include(\"attachment; filename=\\\"reporte.pdf\\\"\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/reportes",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"reportes"
+					]
+				},
+				"description": "Generates a PDF document with inventory statistics and streams it for download."
+			},
+			"response": []
+		},
+		{
+			"name": "4. Restablecer Inventario (POST)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 OK\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response contains full seed data\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property(\"products\");",
+							"    pm.expect(jsonData.products.length).to.be.above(0);",
+							"    // Verify default seed product is back",
+							"    const firstProd = jsonData.products[0];",
+							"    pm.expect(firstProd).to.have.property(\"id\");",
+							"    pm.expect(firstProd).to.have.property(\"name\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/reset",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"reset"
+					]
+				},
+				"description": "Resets the database state to the original seed state configuration."
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000",
+			"type": "string"
+		}
+	]
+}
