@@ -121,9 +121,13 @@ app.get('*', (req, res) => {
 });
 
 // Start the server
-app.listen(PORT, () => {
-    console.log(`=========================================`);
-    console.log(`  NEXUS INVENTORY SERVER ONLINE          `);
-    console.log(`  Local: http://localhost:${PORT}        `);
-    console.log(`=========================================`);
-});
+if (require.main === module) {
+    app.listen(PORT, () => {
+        console.log(`=========================================`);
+        console.log(`  NEXUS INVENTORY SERVER ONLINE          `);
+        console.log(`  Local: http://localhost:${PORT}        `);
+        console.log(`=========================================`);
+    });
+}
+
+module.exports = app;
