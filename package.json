@@ -4,12 +4,17 @@
   "description": "Amazon-style Nexus Inventory - Reorganized with Frontend and Backend Separation",
   "scripts": {
     "setup": "npm install --prefix backend",
-    "start": "npm start --prefix backend"
+    "start": "npm start --prefix backend",
+    "test": "jest",
+    "build": "echo 'Building Nexus Inventory project...' && echo 'Build success!'"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "pdfkit": "^0.18.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
   }
 }

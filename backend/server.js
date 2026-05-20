@@ -14,39 +14,14 @@ app.use(express.json());
 const dbPath = path.join(__dirname, 'data', 'db.json');
 const seedPath = path.join(__dirname, 'data', 'seed.json');
 
+const { readDb: readDbUtil, writeDb: writeDbUtil } = require('./utils/db');
+
 const defaultState = JSON.parse(fs.readFileSync(seedPath, 'utf8'));
 
-// Helper function to read database state
-const readDb = async () => {
-    try {
-        if (!fs.existsSync(dbPath)) {
-            // Initialize with default state if file doesn't exist
-            await writeDb(defaultState);
-            return defaultState;
-        }
-        const data = await fs.promises.readFile(dbPath, 'utf8');
-        return JSON.parse(data);
-    } catch (err) {
-        console.error("Error reading database:", err);
-        return defaultState;
-    }
-};
+// Helper wrappers using local paths
+const readDb = () => readDbUtil(dbPath, defaultState);
+const writeDb = (state) => writeDbUtil(dbPath, state);
 
-// Helper function to write database state
-const writeDb = async (state) => {
-    try {
-        // Ensure parent directory exists
-        const dir = path.dirname(dbPath);
-        if (!fs.existsSync(dir)){
-            fs.mkdirSync(dir, { recursive: true });
-        }
-        await fs.promises.writeFile(dbPath, JSON.stringify(state, null, 2), 'utf8');
-        return true;
-    } catch (err) {
-        console.error("Error writing database:", err);
-        return false;
-    }
-};
 
 // --- API Endpoints ---
 
