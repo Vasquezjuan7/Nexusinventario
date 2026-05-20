@@ -16,6 +16,10 @@ const app = {
 
         if (window.medData.isLoggedIn) {
             document.getElementById('login-screen').style.display = 'none';
+            const headerUsername = document.getElementById('header-username');
+            if (headerUsername && window.medData.currentUser) {
+                headerUsername.textContent = window.medData.currentUser;
+            }
             app.showPage('dashboard');
         }
         console.log("Nexus Inventory System Online.");
@@ -23,8 +27,30 @@ const app = {
 
     handleLogin: async (e) => {
         e.preventDefault();
+        const usernameInput = document.getElementById('login-username');
+        const passwordInput = document.getElementById('login-password');
+        const username = usernameInput ? usernameInput.value.trim() : '';
+        const password = passwordInput ? passwordInput.value.trim() : '';
+
+        // Validate credentials if users exist
+        const users = window.medData.users || [];
+        if (users.length > 0) {
+            const user = users.find(u => u.username === username && u.password === password);
+            if (!user) {
+                alert("Usuario o Token de Acceso incorrecto. Intente de nuevo.");
+                return;
+            }
+        }
+
         window.medData.isLoggedIn = true;
+        window.medData.currentUser = username;
         await window.saveMedState(window.medData);
+        
+        const headerUsername = document.getElementById('header-username');
+        if (headerUsername) {
+            headerUsername.textContent = username;
+        }
+
         document.getElementById('login-screen').style.display = 'none';
         app.showPage('dashboard');
     },
@@ -70,7 +96,7 @@ const app = {
                 app.initReports();
                 break;
             case 'settings':
-                content.innerHTML = UI.renderSettings();
+                content.innerHTML = UI.renderSettings(window.medData);
                 break;
             default:
                 content.innerHTML = `<div class="fade-in"><h1>Modulo en Desarrollo</h1><p>Esta sección estará disponible en la próxima actualización del Nexo.</p></div>`;
@@ -216,6 +242,48 @@ const app = {
                 }
             });
         }
+    },
+
+    handleCreateUser: async (e) => {
+        e.preventDefault();
+        const usernameInput = document.getElementById('new-username');
+        const passwordInput = document.getElementById('new-password');
+        if (!usernameInput || !passwordInput) return;
+        
+        const username = usernameInput.value.trim();
+        const password = passwordInput.value.trim();
+        
+        if (!username || !password) {
+            alert("Por favor, completa todos los campos.");
+            return;
+        }
+
+        // Initialize users list if not exists
+        if (!window.medData.users) {
+            window.medData.users = [];
+        }
+
+        // Check if user already exists
+        const exists = window.medData.users.some(u => u.username.toLowerCase() === username.toLowerCase());
+        if (exists) {
+            alert("El usuario ya existe en el sistema.");
+            return;
+        }
+
+        // Add user
+        window.medData.users.push({ username, password });
+        await window.saveMedState(window.medData);
+        alert(`Usuario "${username}" registrado exitosamente.`);
+        
+        // Refresh settings UI to show the updated list
+        app.showPage('settings');
+    },
+
+    handleLogout: async () => {
+        window.medData.isLoggedIn = false;
+        delete window.medData.currentUser;
+        await window.saveMedState(window.medData);
+        location.reload();
     }
 };
 

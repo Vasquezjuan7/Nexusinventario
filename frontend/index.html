@@ -23,11 +23,11 @@
             <form id="login-form" onsubmit="app.handleLogin(event)">
                 <div class="form-group" style="text-align: left;">
                     <label>Usuario Corporativo</label>
-                    <input type="text" class="form-control" value="admin@nexus.com" required>
+                    <input type="text" id="login-username" class="form-control" value="admin@nexus.com" required>
                 </div>
                 <div class="form-group" style="text-align: left;">
                     <label>Token de Acceso</label>
-                    <input type="password" class="form-control" value="••••••••" required>
+                    <input type="password" id="login-password" class="form-control" value="admin123" required>
                 </div>
                 <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem; margin-top: 1rem;">Entrar al Nexo</button>
             </form>
@@ -91,8 +91,10 @@
             </div>
             <div class="user-profile" style="display: flex; align-items: center; gap: 1rem;">
                 <div style="text-align: right;">
-                    <p style="font-weight: 600; font-size: 0.9rem;">Admin Nexus</p>
-                    <p style="font-size: 0.8rem; color: var(--text-muted);">Warehouse Manager</p>
+                    <p id="header-username" style="font-weight: 600; font-size: 0.9rem;">Admin Nexus</p>
+                    <a href="#" onclick="app.handleLogout()" style="font-size: 0.8rem; color: var(--error); text-decoration: none; display: flex; align-items: center; gap: 0.25rem; justify-content: flex-end;">
+                        <i data-lucide="log-out" style="width: 12px; height: 12px;"></i> Cerrar Sesión
+                    </a>
                 </div>
                 <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; color: var(--secondary);">
                     <i data-lucide="user-cog"></i>

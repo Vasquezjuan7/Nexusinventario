@@ -130,5 +130,9 @@
     { "name": "Ring / Amazon", "category": "Seguridad hogar", "leadTime": "7 days" },
     { "name": "Giant Manufacturing", "category": "Bicicletas", "leadTime": "20 days" }
   ],
-  "billing": []
+  "billing": [],
+  "users": [
+    { "username": "admin@nexus.com", "password": "admin123" },
+    { "username": "Juan", "password": "Juan2026" }
+  ]
 }

@@ -923,5 +923,9 @@ const initialState =     {
                 "leadTime": "20 days"
             }
         ],
-        "billing": []
+        "billing": [],
+        "users": [
+            { "username": "admin@nexus.com", "password": "admin123" },
+            { "username": "Juan", "password": "Juan2026" }
+        ]
     ;

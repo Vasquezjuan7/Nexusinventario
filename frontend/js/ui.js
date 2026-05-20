@@ -277,15 +277,46 @@ const UI = {
         `;
     },
 
-    renderSettings: () => {
+    renderSettings: (state = {}) => {
+        const usersList = (state.users || []).map(u => `
+            <div style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid var(--border); font-size: 0.9rem; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <i data-lucide="user" style="width: 16px; height: 16px; color: var(--primary);"></i>
+                    <span style="font-weight: 600; color: var(--secondary);">${u.username}</span>
+                </div>
+                <span style="color: var(--text-muted); font-family: monospace;">••••••••</span>
+            </div>
+        `).join('');
+
         return `
             <div class="fade-in">
                 <h1>Configuración de Nexus</h1>
-                <div class="stats-grid" style="margin-top: 2rem;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2rem;">
                     <div class="stat-card">
-                        <h3>Mantenimiento</h3>
-                        <p style="font-size: 0.9rem; margin-bottom: 1.5rem; color: var(--text-muted);">Limpia el Nexo de datos temporales para procesos nuevos.</p>
-                        <button class="btn btn-primary" onclick="app.factoryReset()" style="width: 100%;">Hard Reset</button>
+                        <h3>Gestión de Usuarios</h3>
+                        <p style="font-size: 0.85rem; margin-bottom: 1.5rem; color: var(--text-muted);">Crea y administra los usuarios autorizados en el sistema.</p>
+                        <div style="margin-bottom: 1.5rem; max-height: 200px; overflow-y: auto; padding-right: 0.5rem;">
+                            ${usersList || '<p style="color: var(--text-muted); font-size: 0.9rem;">No hay otros usuarios registrados.</p>'}
+                        </div>
+                        <form id="create-user-form" onsubmit="app.handleCreateUser(event)">
+                            <div class="form-group" style="margin-bottom: 0.75rem; text-align: left;">
+                                <label style="font-size: 0.8rem; font-weight: 600;">Nombre de Usuario</label>
+                                <input type="text" id="new-username" class="form-control" placeholder="Ej. Juan" required style="padding: 0.5rem; font-size: 0.85rem;">
+                            </div>
+                            <div class="form-group" style="margin-bottom: 1rem; text-align: left;">
+                                <label style="font-size: 0.8rem; font-weight: 600;">Contraseña</label>
+                                <input type="password" id="new-password" class="form-control" placeholder="Ej. Juan2026" required style="padding: 0.5rem; font-size: 0.85rem;">
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.75rem; font-size: 0.85rem;">Registrar Usuario</button>
+                        </form>
+                    </div>
+
+                    <div class="stat-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <h3>Mantenimiento del Nexo</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1.5rem; color: var(--text-muted);">Restablece la base de datos a sus valores iniciales, borrando todos los registros locales y del servidor.</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="app.factoryReset()" style="width: 100%; background: var(--error); border-color: var(--error); padding: 0.75rem;">Hard Reset</button>
                     </div>
                 </div>
             </div>
