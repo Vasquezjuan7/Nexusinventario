@@ -88,7 +88,7 @@
 							"language": "json"
 						}
 					}
-				],
+				},
 				"url": {
 					"raw": "{{base_url}}/api/state",
 					"host": [
