@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>MedLink - Test Runner</title>
+    <style>
+        body { font-family: sans-serif; padding: 2rem; line-height: 1.6; }
+        .card { background: #f1f5f9; padding: 2rem; border-radius: 12px; max-width: 600px; margin: 0 auto; }
+        .btn { background: #0d9488; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer; }
+        #results { margin-top: 1.5rem; white-space: pre-wrap; font-family: monospace; background: #1e293b; color: #f8fafc; padding: 1rem; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1 style="color: #FF9900;">Nexus Inventory - Test Runner</h1>
+        <p>Valida la integridad de SKUs, persistencia de stock y lógica de almacenes.</p>
+        <button class="btn" style="background: #232F3E; color: white;" onclick="runTests()">Ejecutar Diagnóstico Nexus</button>
+        <div id="results">Listo para probar...</div>
+        <p style="margin-top: 1rem; font-size: 0.8rem; color: #64748b;">Abre la consola del desarrollador (F12) para ver el log detallado.</p>
+        <a href="../index.html" style="display: block; margin-top: 2rem;">← Volver al Sistema</a>
+    </div>
+
+    <script src="../js/data.js"></script>
+    <script src="suite.js"></script>
+    <script>
+        function runTests() {
+            const results = window.medTests.runAll();
+            document.getElementById('results').innerText = results + "\n\n(Ver consola para detalles técnicos)";
+        }
+    </script>
+</body>
+</html>

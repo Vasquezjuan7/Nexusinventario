@@ -1,0 +1,15 @@
+{
+  "name": "nexus-inventory",
+  "version": "1.0.0",
+  "description": "Amazon-style Nexus Inventory - Reorganized with Frontend and Backend Separation",
+  "scripts": {
+    "setup": "npm install --prefix backend",
+    "start": "npm start --prefix backend"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "pdfkit": "^0.18.0"
+  }
+}
